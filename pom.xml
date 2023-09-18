@@ -8,7 +8,7 @@
 		<version>3.1.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.castlabs.gunes</groupId>
 	<artifactId>MediaAnalyzer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>MediaAnalyzer</name>
