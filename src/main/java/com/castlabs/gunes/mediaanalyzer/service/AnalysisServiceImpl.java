@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,7 +29,7 @@ public class AnalysisServiceImpl implements AnalysisService {
             HttpStatus statusCode = (HttpStatus) responseEntity.getStatusCode();
 
             Set<String> locations = new HashSet<>();
-            while (statusCode == HttpStatus.MOVED_PERMANENTLY) {
+            while (statusCode == HttpStatus.MOVED_PERMANENTLY) { // Find the final location until it is not redirected.
                 responseEntity = getNextResponseEntity(restTemplate, responseEntity, locations);
                 statusCode = (HttpStatus) responseEntity.getStatusCode();
             }
@@ -52,6 +53,9 @@ public class AnalysisServiceImpl implements AnalysisService {
                 throw new ResponseStatusException(responseEntity.getStatusCode());
             }
             return boxes;
+        } catch (HttpClientErrorException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(e.getStatusCode(), e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
